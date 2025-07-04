@@ -1,0 +1,13 @@
+[Instruction]
+Please act as a discerning Chief Research Strategist. Your task is to formulate a single, specific, and testable scientific hypothesis that directly addresses the Core Research Question. This hypothesis should be built upon your previous analysis of the available options.
+
+[Core Research Question]
+{chemical_question}
+
+[Your Previous Analysis and Decision Hubs]
+{analysis_from_step1}
+
+[Your Task]
+1.  **Formulate a Core Research Hypothesis:** Review the Decision Hubs you identified. Make a strategic selection from the available options to construct a clear research path. Express this path as a formal hypothesis, following the pattern: "To address the question of [restate core question's goal], we hypothesize that by employing [selected technique] on [selected chemical system], we can leverage [key mechanism] to achieve [specific, measurable outcome]."
+
+2.  **Justify Your Strategic Choice:** Provide a concise rationale for your chosen path. Explain why this combination of technique and materials is the most promising approach to answer the Core Research Question, based on the information provided in the original documents.

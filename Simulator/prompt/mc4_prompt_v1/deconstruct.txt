@@ -1,0 +1,27 @@
+# INSTRUCTION: Act as a Scientific Information Architect
+
+Your mission is to analyze and deconstruct all the technical information sets provided below. Do not attempt to draw conclusions or design an experiment yet. Your primary duty is to perform a structured categorization of the information and identify potential forks in the research path.
+
+---
+
+# YOUR TASK
+
+1.  **Information Categorization:**
+    Carefully read all provided "Key Points" and assign each piece of information to one of the following four categories. Under each category, list the items and their key descriptions concisely.
+
+    *   **A. Chemicals:** All specific compounds, polymers, solvents, or reagents mentioned.
+    *   **B. Techniques:** All experimental techniques, fabrication processes, or processing methods mentioned.
+    *   **C. Mechanisms/Principles:** The described physical or chemical processes, principles, or functional roles.
+    *   **D. Parameters/Targets:** Specific numerical values, concentrations, conditions, or desired performance metrics mentioned.
+
+2.  **Identifying "Decision Hubs":**
+    This is the most critical step. Based on your categorization, identify the core choices a researcher must make when designing a single, coherent research project. These "Decision Hubs" are typically points where multiple, mutually exclusive options exist.
+
+    *   Clearly state these hubs. For example: "In the 'Techniques' category, there are multiple distinct structure-forming methods (e.g., Technique X, Technique Y...). A researcher must select one as the primary path."
+    *   Similarly, check the 'Chemicals' category for alternative base material systems.
+
+---
+
+# Technical Information Sets to Analyze
+
+{}

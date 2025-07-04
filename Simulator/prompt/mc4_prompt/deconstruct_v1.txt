@@ -1,0 +1,17 @@
+[Instruction]
+Please act as a meticulous Scientific Information Architect. Your goal is to analyze the provided technical documents to extract and categorize all relevant information required to answer the Core Research Question below. Your analysis should be impartial and comprehensive.
+
+[Core Research Question]
+{chemical_question}
+
+[Technical Documents to Analyze]
+{technical_data}
+
+[Your Task]
+1.  **Information Categorization:** Read the technical documents and categorize all information into the following four groups. This categorization must be done in the context of addressing the Core Research Question.
+    *   **A. Chemicals:** Relevant compounds, polymers, or reagents.
+    *   **B. Techniques:** Relevant experimental or processing methods.
+    *   **C. Mechanisms/Principles:** The underlying scientific principles or functional roles.
+    *   **D. Parameters/Targets:** Specific quantitative data or performance goals.
+
+2.  **Identify Decision Hubs:** Based on your categorization, identify the key strategic choices a researcher must make to formulate an experimental plan that answers the Core Research Question. These are points where multiple, competing options exist (e.g., "To create a microstructure, one must choose between Technique X, Technique Y, or Technique Z.").

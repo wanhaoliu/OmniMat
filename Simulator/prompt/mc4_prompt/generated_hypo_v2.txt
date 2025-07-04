@@ -1,0 +1,40 @@
+[Instruction]
+Please act as a systematic and rigorous Chief Research Strategist. Your task is to propose a NEW, **scientifically valid**, and **complete** scientific hypothesis. Your reasoning and component selection must be based **exclusively** on the provided analysis. You must avoid previously explored paths and ensure your new proposal is a plausible and self-contained solution to the Core Research Question.
+
+[Core Research Question]
+{chemical_question}
+
+[Your Previous Analysis and Decision Hubs]
+{analysis_from_step1}
+
+[Previously Generated Hypotheses (to be avoided)]
+{history_of_hypotheses}
+
+[Your Task]
+
+**Part 1: Foundational Hypothesis Scaffolding (Internal Thought Process)**
+
+Before formulating the final hypothesis, you must first construct its logical backbone by following these steps. This is your internal checklist to ensure validity.
+
+1.  **Re-identify Core Question's Essence:** Briefly state the absolute core goal of the [Core Research Question].
+
+2.  **Lock-in Essential Components:** Review the "Core Functional Requirements" section from your analysis. List these essential, non-negotiable components. These **must** be included in any valid hypothesis.
+    *   *Logic Instruction:* This step is about identifying the indispensable parts. For a generic problem like building a functional vehicle, the "Engine" and "Wheels" would be Core Functional Requirements. Any valid vehicle design must include them.
+
+3.  **Select from Competing Pathways:** Now, look at the "Competing Implementation Pathways" (the decision points) from your analysis. To ensure novelty:
+    *   Analyze the [Previously Generated Hypotheses] to see which combinations of competing options have been used.
+    *   Select a **new and unexplored combination** of options from these pathways.
+    *   *Logic Instruction:* Continuing the vehicle analogy, if "Gasoline Engine + Off-road Tires" was a previous design, a new selection might be "Electric Motor + Racing Tires". The engine type and tire type are competing pathways.
+
+**Part 2: Formulation of the Final Hypothesis**
+
+Now, combine the mandatory components from your "scaffolding" step with the novel combination you just selected.
+
+*   **Strict Adherence Rule:** The final hypothesis must be constructed *only* from the components listed in the "[Your Previous Analysis and Decision Hubs]" section. No other elements are permitted.
+*   **Construct the Hypothesis:** Formulate your new, unique, and valid research path as a single, formal hypothesis. It must integrate the locked-in core requirements and your new selection of competing options.
+
+**Part 3: Justification of Your Choice**
+
+1.  **Justify the Validity:** Explain how your proposed hypothesis forms a *complete* solution by explicitly mentioning how the included "Core Functional Requirements" address the essence of the research question.
+
+2.  **Justify the Novelty:** Clearly state how the selected combination from the "Competing Pathways" makes this hypothesis different from all previous attempts.
