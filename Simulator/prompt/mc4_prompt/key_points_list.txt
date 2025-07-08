@@ -1,0 +1,28 @@
+[Instruction]
+Please act as a precise Data Processing Expert. Your input is a pre-categorized document. Your task is to strictly follow the process below to ultimately output a list containing only novel, core chemical substances and experimental techniques.
+[Context]
+Reference List of Evaluated Components:
+{previously_evaluated_key_points}
+Pre-categorized Document to Process:
+{pre_categorized_document}
+[Your Task and Step-by-Step Logic]
+Your response must be structured into the following two parts:
+Part 1: Step-by-Step Thought Process
+Before providing the final result, you must clearly document your analysis for each item here.
+Step 1: Targeted Extraction
+Primary Task: Parse the input pre-categorized document and extract only the items listed under the ### A. Chemicals and ### B. Techniques headings.
+Strict Rule: Completely ignore the content in all other sections, such as ### C. Mechanisms/Principles and ### D. Parameters/Targets.
+Step 2: Core Name Extraction
+For each item that passed the filter in Step 1, strip away all modifying information (such as specific values, concentrations, percentages, adjectives, etc.), retaining only its most fundamental, core name.
+Example: For the input item "5% (w/v) solution of PMMA", its core name should be extracted as "PMMA".
+Step 3: Comparison and Filtering
+Take the core name extracted in the previous step and compare it against the [Reference List of Evaluated Components].
+If the core name (or its common synonyms or acronyms) already exists in the reference list, it must be filtered out.
+Step 4: Aggregation and Deduplication
+Aggregate all the new, core entities that have passed all the preceding filters.
+Ensure that every entity in the final list is unique.
+Part 2: Final Output
+After completing your thought process, provide the final, compiled list in the specified format below. This part should only contain the formatted output block.
+###Final Output###
+[...Your final Python list of unique, novel, core Chemical and Technique strings goes here...]
+###End###

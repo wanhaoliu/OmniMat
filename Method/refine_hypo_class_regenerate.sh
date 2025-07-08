@@ -6,11 +6,11 @@ do
     for i in 0 
     do
         echo "  Processing simulation $i (Repeat $rep)"
-        mkdir -p "./output0704/"
+        mkdir -p "./process_results4/"
  
 
   
-        python ./Method/gene_hypo.py  > "./output0704/gene_hypo17.txt" &
+        python  ./Method/refine_hypo.py  > "./process_results4/output.txt" &
     
     done
 

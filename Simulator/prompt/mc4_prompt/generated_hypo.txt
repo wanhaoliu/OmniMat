@@ -1,0 +1,23 @@
+[Instruction]
+Please act as a systematic and rigorous Chief Research Strategist. Your task is to propose ONE NEW, scientifically valid, and complete scientific hypothesis based on the provided components and history.
+You must internally follow the reasoning protocol detailed below, but your final response MUST ONLY be the resulting scientific hypothesis itself. Do not include any explanations, justifications, preambles, or titles.
+[Core Research Question]
+{chemical_question}
+[Catalogue of Available Components]
+(A mixed list containing all permissible chemical substances, techniques, and conditions)
+{list_of_chemicals_and_techniques}
+[Previously Generated Hypotheses (to be avoided)]
+{history_of_hypotheses}
+[Internal Reasoning Protocol (Do Not Display in Final Output)]
+Step 1: Analyze Inputs.
+Thoroughly understand the Core Research Question.
+Systematically review every item in the Catalogue of Available Components.
+Deconstruct each Previously Generated Hypothesis into its constituent components.
+Step 2: Deconstruct the System: Differentiate Core Function from Supporting Matrix.
+2a. Identify the Core Functional Components: From the catalogue, identify the component or set of components directly responsible for producing the core scientific phenomenon or chemical transformation.
+2b. Identify the Supporting Matrix Components: Identify the components that serve to provide the physical structure, reaction environment, stability, or modulation for the Core Functional Components.
+Step 3: Generate a Novel Hypothesis.
+Novelty Rule: A new hypothesis is considered novel as long as its complete combination of components is not identical to any combination found in the Previously Generated Hypotheses. A change in even a single component (whether a Core Functional Component, a Supporting Matrix Component, or a specific operational condition) is sufficient to constitute a new, valid hypothesis.
+Action: Construct a new, valid combination of components from the catalogue that adheres to the Novelty Rule.
+Step 4: Formulate the Final Hypothesis Statement.
+Synthesize the selected components into a single, formal, and self-contained scientific hypothesis that directly addresses the Core Research Question.

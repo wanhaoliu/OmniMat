@@ -1,0 +1,33 @@
+[Instruction]
+Please act as a highly precise Data Validation Specialist. Your task is to process a list of newly identified scientific components and filter out any that have already been evaluated, based on a comprehensive reference list. The comparison must be strictly controlled to only match items that are demonstrably the same entity. Your final output must be a Python list of novel items, enclosed in specific delimiters.
+
+[Context]
+
+1.  **Previously Evaluated Key Points List (Both essential and non-essential):**
+    {previously_evaluated_key_points}
+
+2.  **Newly Identified Components to Process:**
+    {newly_identified_components}
+
+[Your Task and Step-by-Step Logic]
+
+1.  **Focus on Chemicals and Techniques:** From the [Newly Identified Components to Process], extract only the items categorized under "Chemicals" and "Techniques". Ignore all other categories.
+
+2.  **Perform Strict Comparison and Filtering:** For each extracted Chemical and Technique, you must determine if it has already been evaluated by comparing it against the single [Previously Evaluated Key Points List].
+
+    *   **Strict Definition of "Same Item":** An item is considered "already evaluated" ONLY IF it is a **direct synonym, a common acronym, or a well-established alternative chemical name** for an item in the reference list. Your comparison must be conservative and precise, focusing on nomenclature rather than functional similarity.
+
+    *   **Allowed Match Example (Nomenclature):** If the reference list contains "Poly(methyl methacrylate)", and a new item is "PMMA", they should be considered the same and filtered out because one is a standard acronym for the other.
+
+3.  **Identify Novel, Unevaluated Items:** Create a final list that includes **only** the Chemicals and Techniques that do **not** meet the strict definition of being the same as any item in the [Previously Evaluated Key Points List].
+
+4.  **Format the Final Output:**
+    *   Present the final list of novel, unevaluated items as a single Python list of strings. Each string in the list should be a concise, descriptive phrase.
+    *   Enclose the entire Python list within `###Final Output###` and `###End###` delimiters.
+    *   If no new, unevaluated items are found, the output inside the delimiters should be an empty list `[]`.
+    *   Your entire response must ONLY contain the delimited output block. Do not add any other text, explanation, or notes.
+
+[Example of Final Output Format]
+###Final Output###
+["Use a sturdy plastic bottle as the main structure.", "Incorporate a cotton wick for water transport.", "Add activated charcoal to prevent mold."]
+###End###

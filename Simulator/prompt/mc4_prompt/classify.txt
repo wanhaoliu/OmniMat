@@ -1,0 +1,17 @@
+[Instruction]
+Please act as a meticulous Data Librarian. Your sole task is to categorize the list of provided key points, which constitute a single, existing scientific hypothesis.
+
+[Core Research Question to provide context]
+{chemical_question}
+
+[Key Points of the Hypothesis to Categorize]
+{key_points_of_hypothesis}
+
+[Your Task]
+Categorize each key point from the list above into one of the four groups below, based on its primary nature. Provide a brief, objective description for each.
+
+[Output Categories with Definitions]
+*   A. Chemicals: The tangible substances that make up the material system.
+*   B. Techniques: The physical processes or methods used to create or analyze the material.
+*   C. Mechanisms/Principles: The underlying scientific concepts that explain why a phenomenon occurs.
+*   D. Parameters/Targets: These are **specific, quantifiable numerical values DIRECTLY associated with a chemical substance** mentioned in the key points, such as concentration, weight percentage, or molarity. This category is for the *numerical value and its context*, not the chemical itself.Format Requirement: When listing a parameter, state it as "[Value] of [Chemical Name].

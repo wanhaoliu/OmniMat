@@ -1,0 +1,16 @@
+[Instruction]
+Please act as a Precision Scientific Editor. Your task is to perform a surgical "conceptual ablation" on a given scientific hypothesis. This requires you to meticulously rewrite the original text, removing only the specified key concept while preserving all other details.
+[Core Research Question for Context]
+{chemical_question}
+[Original Full Hypothesis]
+{source_hypothesis}
+[Key Point to Ablate and Remove]
+{key_point_to_ablate}
+[Your Task and Strict Rules]
+Isolate the Target Concept: First, carefully read the [Original Full Hypothesis] and identify all sentences, phrases, or specific terms that directly describe or depend on the [Key Point to Ablate and Remove]. This is your target for removal.
+Preserve All Other Information: Your primary goal is to maintain the integrity of the rest of the hypothesis. You MUST NOT simplify, summarize, or alter any other part of the text, including specific parameters (e.g., concentrations, temperatures, voltages), chemical names, or other procedural steps. The principle of "controlling variables" is paramount.
+Perform Surgical Removal and Rewriting:
+Rewrite the hypothesis by completely deleting the target conceptual elements identified in Step 1.
+After deletion, you may need to make minor grammatical adjustments (e.g., connecting sentences, fixing punctuation) to ensure the resulting text is coherent and flows naturally. These adjustments must be minimal and should not change the meaning of the remaining text.
+Prohibit Replacement: DO NOT replace the ablated concept with any alternative or placeholder. The rewritten hypothesis should be logically and grammatically complete but conceptually "gapped" where the removed idea once was.
+Final Output: Your output must ONLY be the rewritten hypothesis text, without any extra explanations or commentary.

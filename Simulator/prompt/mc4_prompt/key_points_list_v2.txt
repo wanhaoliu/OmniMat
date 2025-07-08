@@ -1,0 +1,52 @@
+[Instruction]
+Please act as a Data Normalization and Deduplication Expert. Your task is to process a list of candidate items and filter out any whose core component has already been evaluated, based on a comprehensive reference list. Your judgment must be based on identifying the fundamental entity, ignoring attached parameters. Your final output should be a list of these novel, core entities.
+
+[Context]
+
+1.  **Reference List of Evaluated Components:**
+    {previously_evaluated_key_points}
+
+2.  **Candidate List of Chemicals and Techniques to Process:**
+    {candidate_chemicals_and_techniques}
+
+[Your Task and Step-by-Step Logic]
+
+Your response must be structured into two parts: a "Scratchpad" for your thought process and a "Final Output" with the result.
+
+**Part 1: Scratchpad (Your Thought Process)**
+
+Before providing the final list, you must first work through your reasoning here. For each item in the [Candidate List of Chemicals and Techniques to Process], perform and document the following steps:
+
+*   **Step A: Identify the Core Entity.**
+    *   From the candidate item string, you must extract its **base component** or **core entity**. This means stripping away any parameters, concentrations, adjectives, or other modifiers.
+    *   *Generic Example of Thought Process:*
+        *   Candidate: "A 50mg dose of Acetaminophen"
+        *   Core Entity Identified: "Acetaminophen"
+        *   Candidate: "The novel 'X-Pulse' Sonication method"
+        *   Core Entity Identified: "Sonication"
+
+*   **Step B: Perform Strict Comparison of the Core Entity.**
+    *   Take the extracted **core entity** and check if it has a semantic equivalent in the [Reference List of Evaluated Components].
+    *   **Strict Definition of "Same Item":** An item is a match ONLY IF the core entity is a **direct synonym, a common acronym, or a well-established alternative name** for an item in the reference list.
+    *   *Generic Example of Thought Process:*
+        *   Reference List contains: "Paracetamol"
+        *   Core Entity: "Acetaminophen"
+        *   Comparison Result: MATCH.
+        *   Decision: Filter out "A 50mg dose of Acetaminophen".
+
+    *   *Generic Example of Thought Process:*
+        *   Reference List contains: "Stirring"
+        *   Core Entity: "Sonication"
+        *   Comparison Result: NO MATCH.
+        *   Decision: Keep the core entity "Sonication".
+
+*   **Step C: Compile the Final List of Core Entities.**
+    *   After evaluating all candidates, compile a list of the unique **Core Entities** that you decided to KEEP. If multiple candidates resolve to the same novel core entity (e.g., "1-3 M solution of X" and "5 M solution of X"), that core entity ("X") should appear only once in the final list.
+
+**Part 2: Final Output**
+
+After completing your analysis in the scratchpad, provide the final, compiled list of unique core entities in the specified format below. This part should contain ONLY the delimited output block.
+
+###Final Output###
+[...Your final Python list of Core Entity strings goes here...]
+###End###
