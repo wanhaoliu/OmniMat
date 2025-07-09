@@ -1,5 +1,5 @@
 from simulation_validation import feedback_score
-from gene_hypo import regenerate_from_filtered_data
+from gene_hypo import extract_lsit,regenerate_from_filtered_data,print_header,ablate_hypothesis,regenerate_from_list_data
 import os
 import json
 # from dataset import extract_and_save_key_points
@@ -13,9 +13,14 @@ def read_and_filter_json(file_path, score_threshold=0.001):
     dataset.append(data[1])  # Add gdth_hypothesis to dataset
     dataset_key_point = []  # Initialize list for key points
     for i in range(len(data[2])):
+        # data_score = []
         if float(data[2][i][-1]) > score_threshold:
             print(f"Processing data point {i} with value {data[2][i][-1]}")
-            dataset_key_point.append(data[2][i][1])
+            # dataset_key_point.append(data[2][i][1])
+            
+            # data_score.append(data[2][i])
+            # dataset_key_point.append(data_score)  # Append the filtered key point
+            dataset_key_point.append(data[2][i])  # Append the filtered key point
     dataset.append(dataset_key_point)  # Add key points to dataset
     return dataset
 
@@ -39,60 +44,62 @@ def extract_and_save_key_points(input_path, output_file_path,score_threshold=0.0
     save_dataset_to_json(filtered_data, output_file_path)
 
 
-def iterative_process(initial_hypotheses_file, index, correction_factor, output_dir, num_iterations=10):
-
+def iterative_process(initial_hypotheses_file, index, correction_factor, output_dir, num_iterations=3):
     current_hypotheses_file = initial_hypotheses_file
+    iteration_num = 1
+    iteration_output_dir = os.path.join(output_dir, f"iteration_{iteration_num}")
 
-    for i in range(num_iterations):
-        iteration_num = i + 1
-        print(f"\n--- Iteration {iteration_num}/{num_iterations} ---")
-
-        # define the output directory for this iteration
-        iteration_output_dir = os.path.join(output_dir, f"iteration_{iteration_num}")
-        os.makedirs(iteration_output_dir, exist_ok=True)
-
-        # define the output file paths for this iteration
-        key_points_path = os.path.join(iteration_output_dir, f"key_points_{iteration_num}.json")
-        regenerated_hypotheses_path = os.path.join(iteration_output_dir, f"regenerated_hypotheses_{iteration_num}.json")
-
-        # simulation_validation input: hypotheses_file 
-        filtered_data_path = feedback_score(
+    # simulator hypotheses feedback_score
+    filtered_data_path = feedback_score(
             hypotheses_file=current_hypotheses_file, 
             index=index, 
             correction_factor=correction_factor, 
             output_dir=iteration_output_dir  # input directory for feedback_score 
         )
-
-        # extract_and_save_key_points input: filtered_data_path
-        extract_and_save_key_points(
+    
+    key_points_path = os.path.join(iteration_output_dir, f"key_points_{iteration_num}.json")
+    # extract key points from filtered data
+    extract_and_save_key_points(
             input_path=filtered_data_path, # use the output from feedback_score
             output_file_path=key_points_path, 
             score_threshold=0.001
         )
-
-        with open(key_points_path, 'r', encoding='utf-8') as f:
+    # Check if the key points file exists and is not empty
+    with open(key_points_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        if data[2]==[]:
-            print(f"[ERROR] No key points found in iteration {iteration_num}. Ending process.")
-            break
+    if data[2]==[]:
+        print(f"[ERROR] No key points found in iteration {iteration_num}. Ending process.")
+        return
+    previously_evaluated_list = []
+    chemical_question = data[0]
+    for i in range(len(data[2])):
+        technical_data = data[2][i][1] # extract the key points
+        # Extract the list of simulated hypotheses from the technical data except the previously_evaluated_list
+        extract_list = extract_lsit(chemical_question, technical_data, previously_evaluated_list)
+    # Get the source hypothesis from the data\
+        source_hypothesis = data[2][i][0]  # source hypothesis
+        baseline_score = data[2][i][-1]  # baseline score
+    # ---STEP 3: HYPOTHESIS ABLATION ---
+        print_header("STEP  3:HYPOTHESIS ABLATION")
+    # Get the source hypothesis from the data
+        essential_key_points = ablate_hypothesis(extract_list, chemical_question, source_hypothesis, baseline_score,initial_hypotheses_file,iteration_output_dir,score_drop_threshold=0.01)
 
-        # regenerate hypotheses from filtered data
-        regenerate_from_filtered_data(
-            input_path=key_points_path,
-            output_path=regenerated_hypotheses_path,
-            num=5  # Number of hypotheses to regenerate
-        )
+        print(f"Essential Key Points: {essential_key_points}")
 
-        # Update the current hypotheses file for the next iteration
-        current_hypotheses_file = regenerated_hypotheses_path
+    
+        previously_evaluated_list.append(essential_key_points)  # Append the essential key points to the list
+
+
+    regenerate_from_list_data(chemical_question,previously_evaluated_list, iteration_output_dir,num_iterations)
 
     print(f"\n✅ Iterative process completed. Check the '{output_dir}' directory.")
 
 
 # Main function to run the iterative process
 if __name__ == '__main__':
-    main_output_directory = "./process_results4"
+    main_output_directory = "./process_results5"
     initial_file = "./Data_experiment/i-TE/0/0.json"
+   
 
 
     # Run the iterative process with the specified parameters

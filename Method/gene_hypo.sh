@@ -10,7 +10,7 @@ do
  
 
   
-        python ./Method/gene_hypo.py  > "./output0704/gene_hypo17.txt" &
+        python ./Method/gene_hypo.py  > "./output0704/gene_hypo18.txt" &
     
     done
 

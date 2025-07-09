@@ -81,7 +81,7 @@ def validate_and_retry_list(feedback, prompt, api_request):
     print("Critical Error: Could not extract a valid dictionary after retries.")
     return None
 
-
+# refine_hypo_class_regenerate.py
 def regenerate_from_filtered_data(input_path, output_path,num=10):
     """
     Regenerates the dataset from the filtered data file.
@@ -213,19 +213,19 @@ def ablate_hypothesis(key_points_to_ablate, question, source_hypothesis, baselin
         formatted_data = questions_hypothesis_data.copy()  # Start with the original question and hypothesis
         formatted_data.append(regenerate_data)
         # Save the ablated hypothesis to a file
-        output_dir = f"{output_path}/ablated_hypothesis_{i+1}"
+        point_to_ablate = point_to_ablate.replace('/', '_')
+        output_dir = f"{output_path}/ablated_hypothesis_{point_to_ablate}"
         # Ensure the output directory exists
         os.makedirs(output_dir, exist_ok=True)
-        ablated_hypothesis_file = f"{output_dir}/ablated_hypothesis_{i+1}.json"
+        ablated_hypothesis_file = f"{output_dir}/ablated_hypothesis_{point_to_ablate}.json"
 
         with open(ablated_hypothesis_file, 'w', encoding='utf-8') as f:
             json.dump(formatted_data, f, indent=4)
-        output_dir = f"{output_path}/ablated_hypothesis_{i+1}"
+        # output_dir = f"{output_path}/ablated_hypothesis_{i+1}"
         # Ensure the output directory exists
         os.makedirs(output_dir, exist_ok=True)
         essential_key_points = evaluate_ablated_hypothesis(ablated_hypothesis_file, i+1, baseline_score, score_drop_threshold, point_to_ablate, essential_key_points,output_dir)
     return essential_key_points
-
 
 
 def evaluate_ablated_hypothesis(ablated_hypothesis_file, index, baseline_score, score_drop_threshold, point_to_ablate, essential_key_points, output_dir):
@@ -244,7 +244,7 @@ def evaluate_ablated_hypothesis(ablated_hypothesis_file, index, baseline_score, 
             # BEGIN: modified to take absolute value
             score_drop = float(baseline_score) - float(ablated_score)
           
-            print(f"Score Drop: {score_drop:.2f}")
+            print(f"Score Drop: {score_drop:.5f}")
 
             if score_drop >= score_drop_threshold:
                 print(f"DECISION: Score drop is significant. '{point_to_ablate}' is ESSENTIAL.")
@@ -277,6 +277,126 @@ def evaluate_ablated_hypothesis(ablated_hypothesis_file, index, baseline_score, 
     #     print(f"- {point}")
 
     # return essential_key_points
+
+def regenerate_from_list_data(chemical_question,ssential_key_points, output_dir,num=3):
+    """
+    Regenerates the dataset from the filtered data file.
+
+    """
+    # Initialize the list to store formatted data
+    formatted_data = []
+    # Initialize the list to store regenerated data
+    regenerate_data = []
+    for i in range(num):
+        
+        # --- HYPOTHESIS FORMULATION ---
+        print_header("FORMULATING HYPOTHESIS")
+        try:
+            with open(PROMPT_4_FILE, 'r', encoding='utf-8') as f:
+                prompt4_template = f.read()
+        except FileNotFoundError:
+            print(f"[ERROR] Prompt file not found: {PROMPT_4_FILE}")
+            return
+
+        prompt4_formatted = prompt4_template.format(
+            chemical_question=chemical_question,
+            list_of_chemicals_and_techniques=ssential_key_points,
+           history_of_hypotheses = regenerate_data
+        )
+        print(f"prompt4_formatted{prompt4_formatted}\n")
+        step4_output = api_request(prompt4_formatted)
+
+        if not step4_output:
+            print("[ERROR] generate failed. Aborting process.")
+            return
+        print("formulating hypothesis...\n")
+        print(textwrap.fill(step4_output, width=100))
+        regenerate_data.append(step4_output) 
+
+    #add the regenerated data to the formatted data
+    formatted_data.append(regenerate_data)
+    # Save to output path
+    output_path = os.path.join(output_dir, "regenerated_data.json")
+    with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump(formatted_data, f, indent=4)
+        
+    print(f"Regenerated dataset saved to: {output_path}")
+
+def extract_lsit(chemical_question, technical_data, previously_evaluated_list):
+
+    # --- STEP 1: DECONSTRUCTION & CATEGORIZATION ---
+    print_header("STEP 1: DECONSTRUCTING INFORMATION")
+    try:
+        with open(PROMPT_1_FILE, 'r', encoding='utf-8') as f:
+            prompt1_template = f.read()
+    except FileNotFoundError:
+        print(f"[ERROR] Prompt file not found: {PROMPT_1_FILE}")
+        return
+
+    prompt1_formatted = prompt1_template.format(
+        chemical_question=chemical_question,
+        key_points_of_hypothesis=technical_data
+    )
+    
+    print(f"prompt1_formatted{prompt1_formatted}\n")
+    step1_output = api_request(prompt1_formatted)
+
+    if not step1_output:
+        print("[ERROR] Step 1 failed. Aborting process.")
+        return
+    print("deconstructing information...\n")
+    print(textwrap.fill(step1_output, width=100))
+
+
+    # --- STEP 2: KEY POINTS TO LIST ---
+    print_header("STEP 2: KEY POINTS TO LIST")
+
+    try:
+        with open(PROMPT_2_FILE, 'r', encoding='utf-8') as f:
+            prompt2_template = f.read()
+    except FileNotFoundError:
+        print(f"[ERROR] Prompt file not found: {PROMPT_2_FILE}")
+        return
+    prompt2_formatted = prompt2_template.format(
+        previously_evaluated_key_points=previously_evaluated_list,
+        pre_categorized_document=step1_output
+    )
+
+    print(f"prompt2_formatted{prompt2_formatted}\n")
+    step2_output = api_request(prompt2_formatted)
+
+    extract_list = validate_and_retry_list(step2_output, prompt2_formatted, api_request)
+
+    if not step2_output:
+        print("[ERROR] Step 2 failed. Aborting process.")
+        return
+    print("formulating hypothesis...\n")
+    # print(textwrap.fill(step2_output, width=100))
+    print(f"extract_list{extract_list}\n")
+    # previously_evaluated_list.append(extract_list)
+    # print(f"previously_evaluated_list{previously_evaluated_list}\n")
+    # return previously_evaluated_list
+    return extract_list
+
+   
+    # --- STEP 3: HYPOTHESIS ABLATION ---
+    print_header("STEP 3: HYPOTHESIS ABLATION")
+
+    source_hypothesis="We hypothesize that engineering a dual-crosslinked hierarchical polymer electrolyte system combining poly(ionic liquids) (PILs) and poly(vinyl alcohol) (PVA) will significantly enhance ionic conductivity and mechanical properties for thermoelectric applications. This will be achieved through a meticulously designed process involving salting-out, freeze-casting, and electrospinning techniques, integrated with the incorporation of thermogalvanic ions.\n\nMethodology:\n\n1. Material Preparation:\n   - Synthesize a PIL matrix via a chemical modification step that introduces sulfonate groups (—SO₃⁻) to the polymer backbone, enhancing ionic transport. This should be accomplished using a suitable solvent such as dimethylformamide (DMF) at 60°C for 3 hours under nitrogen conditions to prevent moisture contamination.\n   - Prepare a 10% (w/v) PVA solution in deionized water at 80°C, adding lithium salts (e.g., LiCl) at a concentration of 0.2 M to enhance ionic mobility across the polymer matrix.\n\n2. Salting-Out Process:\n   - Gradually introduce ammonium sulfate (0.2 M) to the PVA solution while stirring at a controlled rate of 300 RPM. Allow the solution to phase-separate at 25°C for 2 hours to induce the formation of porous microstructures, targeting the creation of a network conducive to ionic transport.\n\n3. Dual-Crosslinking and Hierarchical Structure Formation:\n   - Apply the synthesized PIL solution onto the phase-separated PVA layer using a spray-coating method to ensure uniform coverage. Crosslink the hybrid system using 0.05 M N,N'-methylenebisacrylamide under 254 nm UV irradiation for 10 minutes to form a robust interpenetrating network that enhances ionic pathways.\n   - Utilize electrospinning with parameters set at an applied voltage of 18 kV and a solution concentration of 12% (w/v). Collect aligned fibers on a rotating collector to integrate into the polymer matrix, followed by ice-templating, freezing the assembly with a rate of -2 °C/min to form homogeneous nanochannels.\n\n4. Incorporation of Thermogalvanic Ions:\n   - Integrate a redox couple (e.g., ferro/ferricyanide) at a concentration of 1-3 mol/L during the gelation phase to enhance electrochemical performance. Aim for homogenous dispersion through a gentle mixing process that maintains structural integrity.\n\n5. Mechanical Training Procedure:\n   - Conduct cyclic stretching of the resultant polymer electrolyte at strains of 20-30% for 500 cycles. This mechanical training aims to align the polymer chains and improve inter-fibrillar bonding, enhancing the material's fatigue resistance and overall mechanical strength.\n\n6. Characterization:\n   - Employ Scanning Electron Microscopy (SEM) to elucidate the microstructural characteristics, confirming the alignment of nanochannels and fibers. Measure ionic conductivity via Electrochemical Impedance Spectroscopy (EIS) at varying temperatures (20-80°C), ensuring targeted conductivity exceeds 10⁻³ S/m.\n   - Assess mechanical integrity through tensile tests following ASTM D638, aiming for mechanical toughness > 2500 J/m² and elongation at break beyond 300%.\n\n7. Device Integration:\n   - Lastly, incorporate the engineered polymer electrolyte into a prototype thermoelectric cell, evaluating essential parameters such as the Seebeck coefficient and output power density against established benchmarks. This step aims to validate the practical applicability of the developed hybrid polymer systems in next-generation thermoelectric devices.\n\nBy utilizing this comprehensive methodology, we anticipate overcoming the current limitations of polymer electrolytes, thereby significantly enhancing their ionic conductivity and mechanical resilience for thermoelectric applications."
+
+    # print(f"--------------------source_hypothesis---------\n{source_hypothesis}")
+
+    baseline_score = 0.043936933623407
+    input_path = INITIAL_DATA_FILE
+    output_path = "./output0708_TEST2/"
+    os.makedirs(output_path, exist_ok=True)
+    essential_key_points = ablate_hypothesis(extract_list, chemical_question, source_hypothesis, baseline_score,input_path,output_path,score_drop_threshold=0.01)
+    ablate_hypothesis(extract_list, chemical_question, source_hypothesis)
+    # essential_key_points = [ "Poly(vinyl alcohol) (PVA)", "Freeze-casting","Ferro/Ferricyanide Redox Couple" ]
+    print(f"Essential Key Points: {essential_key_points}")
+
+    regenerate_from_list_data(chemical_question,essential_key_points, output_path,num=3)
+
 
 
 
@@ -313,7 +433,7 @@ def main():
     # return
 
 
-    list = ["789","Poly(ionic liquid) Matrix"]
+    list = ["Poly(ionic liquid) Matrix"]
     # --- STEP 2: KEY POINTS TO LIST ---
     print_header("STEP 2: KEY POINTS TO LIST")
 
@@ -347,15 +467,18 @@ def main():
 
     source_hypothesis="We hypothesize that engineering a dual-crosslinked hierarchical polymer electrolyte system combining poly(ionic liquids) (PILs) and poly(vinyl alcohol) (PVA) will significantly enhance ionic conductivity and mechanical properties for thermoelectric applications. This will be achieved through a meticulously designed process involving salting-out, freeze-casting, and electrospinning techniques, integrated with the incorporation of thermogalvanic ions.\n\nMethodology:\n\n1. Material Preparation:\n   - Synthesize a PIL matrix via a chemical modification step that introduces sulfonate groups (—SO₃⁻) to the polymer backbone, enhancing ionic transport. This should be accomplished using a suitable solvent such as dimethylformamide (DMF) at 60°C for 3 hours under nitrogen conditions to prevent moisture contamination.\n   - Prepare a 10% (w/v) PVA solution in deionized water at 80°C, adding lithium salts (e.g., LiCl) at a concentration of 0.2 M to enhance ionic mobility across the polymer matrix.\n\n2. Salting-Out Process:\n   - Gradually introduce ammonium sulfate (0.2 M) to the PVA solution while stirring at a controlled rate of 300 RPM. Allow the solution to phase-separate at 25°C for 2 hours to induce the formation of porous microstructures, targeting the creation of a network conducive to ionic transport.\n\n3. Dual-Crosslinking and Hierarchical Structure Formation:\n   - Apply the synthesized PIL solution onto the phase-separated PVA layer using a spray-coating method to ensure uniform coverage. Crosslink the hybrid system using 0.05 M N,N'-methylenebisacrylamide under 254 nm UV irradiation for 10 minutes to form a robust interpenetrating network that enhances ionic pathways.\n   - Utilize electrospinning with parameters set at an applied voltage of 18 kV and a solution concentration of 12% (w/v). Collect aligned fibers on a rotating collector to integrate into the polymer matrix, followed by ice-templating, freezing the assembly with a rate of -2 °C/min to form homogeneous nanochannels.\n\n4. Incorporation of Thermogalvanic Ions:\n   - Integrate a redox couple (e.g., ferro/ferricyanide) at a concentration of 1-3 mol/L during the gelation phase to enhance electrochemical performance. Aim for homogenous dispersion through a gentle mixing process that maintains structural integrity.\n\n5. Mechanical Training Procedure:\n   - Conduct cyclic stretching of the resultant polymer electrolyte at strains of 20-30% for 500 cycles. This mechanical training aims to align the polymer chains and improve inter-fibrillar bonding, enhancing the material's fatigue resistance and overall mechanical strength.\n\n6. Characterization:\n   - Employ Scanning Electron Microscopy (SEM) to elucidate the microstructural characteristics, confirming the alignment of nanochannels and fibers. Measure ionic conductivity via Electrochemical Impedance Spectroscopy (EIS) at varying temperatures (20-80°C), ensuring targeted conductivity exceeds 10⁻³ S/m.\n   - Assess mechanical integrity through tensile tests following ASTM D638, aiming for mechanical toughness > 2500 J/m² and elongation at break beyond 300%.\n\n7. Device Integration:\n   - Lastly, incorporate the engineered polymer electrolyte into a prototype thermoelectric cell, evaluating essential parameters such as the Seebeck coefficient and output power density against established benchmarks. This step aims to validate the practical applicability of the developed hybrid polymer systems in next-generation thermoelectric devices.\n\nBy utilizing this comprehensive methodology, we anticipate overcoming the current limitations of polymer electrolytes, thereby significantly enhancing their ionic conductivity and mechanical resilience for thermoelectric applications."
 
-    print(f"--------------------source_hypothesis---------\n{source_hypothesis}")
+    # print(f"--------------------source_hypothesis---------\n{source_hypothesis}")
 
-    baseline_score = 0.012890689144001
+    baseline_score = 0.043936933623407
     input_path = INITIAL_DATA_FILE
-    output_path = "./output0707_TEST1/"
+    output_path = "./output0708_TEST2/"
     os.makedirs(output_path, exist_ok=True)
-    essential_key_points = ablate_hypothesis(extract_list, chemical_question, source_hypothesis, baseline_score,input_path,output_path,score_drop_threshold=0.009)
+    essential_key_points = ablate_hypothesis(extract_list, chemical_question, source_hypothesis, baseline_score,input_path,output_path,score_drop_threshold=0.01)
     # ablate_hypothesis(extract_list, chemical_question, source_hypothesis)
+    # essential_key_points = [ "Poly(vinyl alcohol) (PVA)", "Freeze-casting","Ferro/Ferricyanide Redox Couple" ]
     print(f"Essential Key Points: {essential_key_points}")
+
+    regenerate_from_list_data(chemical_question,essential_key_points, output_path,num=3)
 
 
     return
