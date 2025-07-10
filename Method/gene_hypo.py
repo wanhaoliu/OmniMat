@@ -170,7 +170,7 @@ def regenerate_from_filtered_data(input_path, output_path,num=10):
 
 
 
-def ablate_hypothesis(key_points_to_ablate, question, source_hypothesis, baseline_score,input_path,output_path,score_drop_threshold=0.08):
+def ablate_hypothesis(key_points_to_ablate, question, source_hypothesis, baseline_score,input_path,output_file_dir,score_drop_threshold=0.08):
     try:
         with open(PROMPT_3_FILE, 'r', encoding='utf-8') as f:
             prompt3_template = f.read()
@@ -213,17 +213,17 @@ def ablate_hypothesis(key_points_to_ablate, question, source_hypothesis, baselin
         formatted_data = questions_hypothesis_data.copy()  # Start with the original question and hypothesis
         formatted_data.append(regenerate_data)
         # Save the ablated hypothesis to a file
-        point_to_ablate = point_to_ablate.replace('/', '_')
-        output_dir = f"{output_path}/ablated_hypothesis_{point_to_ablate}"
+        point_to_ablate_path = point_to_ablate.replace('/', '_')
+        output_dir = f"{output_file_dir}/ablated_hypothesis_{point_to_ablate_path}"
         # Ensure the output directory exists
         os.makedirs(output_dir, exist_ok=True)
-        ablated_hypothesis_file = f"{output_dir}/ablated_hypothesis_{point_to_ablate}.json"
+        ablated_hypothesis_file = f"{output_dir}/ablated_hypothesis_{point_to_ablate_path}.json"
 
         with open(ablated_hypothesis_file, 'w', encoding='utf-8') as f:
             json.dump(formatted_data, f, indent=4)
-        # output_dir = f"{output_path}/ablated_hypothesis_{i+1}"
+        # output_dir = f"{output_dir}/ablated_hypothesis_{i+1}"
         # Ensure the output directory exists
-        os.makedirs(output_dir, exist_ok=True)
+        # os.makedirs(output_dir, exist_ok=True)
         essential_key_points = evaluate_ablated_hypothesis(ablated_hypothesis_file, i+1, baseline_score, score_drop_threshold, point_to_ablate, essential_key_points,output_dir)
     return essential_key_points
 
@@ -235,7 +235,7 @@ def evaluate_ablated_hypothesis(ablated_hypothesis_file, index, baseline_score, 
             
             with open(sore_data_path, 'r') as file:
                 score_data = json.load(file)
-            
+            print(f"Baseline Score: {baseline_score}")
             print(f"Processing data point with value {score_data[2][-1][-1]}")
             ablated_score = score_data[2][-1][-1]
             
@@ -370,7 +370,7 @@ def extract_lsit(chemical_question, technical_data, previously_evaluated_list):
     if not step2_output:
         print("[ERROR] Step 2 failed. Aborting process.")
         return
-    print("formulating hypothesis...\n")
+    # print("formulating hypothesis...\n")
     # print(textwrap.fill(step2_output, width=100))
     print(f"extract_list{extract_list}\n")
     # previously_evaluated_list.append(extract_list)
@@ -396,8 +396,6 @@ def extract_lsit(chemical_question, technical_data, previously_evaluated_list):
     print(f"Essential Key Points: {essential_key_points}")
 
     regenerate_from_list_data(chemical_question,essential_key_points, output_path,num=3)
-
-
 
 
 def main():
@@ -502,14 +500,6 @@ def main():
         return
     print("formulating hypothesis...\n")
     print(textwrap.fill(step3_output, width=100))
-
-
-
-
-
-
-
-
 
     # --- STEP 3: VALIDATION PROTOCOL DESIGN ---
     print_header("STEP 3: DESIGNING VALIDATION PROTOCOL (FINAL OUTPUT)")

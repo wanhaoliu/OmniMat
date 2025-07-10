@@ -1,5 +1,5 @@
 from simulation_validation import feedback_score
-from gene_hypo import extract_lsit,regenerate_from_filtered_data,print_header,ablate_hypothesis,regenerate_from_list_data
+from gene_hypo import extract_lsit,print_header,ablate_hypothesis,regenerate_from_list_data
 import os
 import json
 # from dataset import extract_and_save_key_points
@@ -17,7 +17,7 @@ def read_and_filter_json(file_path, score_threshold=0.001):
         if float(data[2][i][-1]) > score_threshold:
             print(f"Processing data point {i} with value {data[2][i][-1]}")
             # dataset_key_point.append(data[2][i][1])
-            
+
             # data_score.append(data[2][i])
             # dataset_key_point.append(data_score)  # Append the filtered key point
             dataset_key_point.append(data[2][i])  # Append the filtered key point
@@ -62,7 +62,7 @@ def iterative_process(initial_hypotheses_file, index, correction_factor, output_
     extract_and_save_key_points(
             input_path=filtered_data_path, # use the output from feedback_score
             output_file_path=key_points_path, 
-            score_threshold=0.001
+            score_threshold=0.001 
         )
     # Check if the key points file exists and is not empty
     with open(key_points_path, 'r', encoding='utf-8') as f:
@@ -80,14 +80,16 @@ def iterative_process(initial_hypotheses_file, index, correction_factor, output_
         source_hypothesis = data[2][i][0]  # source hypothesis
         baseline_score = data[2][i][-1]  # baseline score
     # ---STEP 3: HYPOTHESIS ABLATION ---
-        print_header("STEP  3:HYPOTHESIS ABLATION")
+        print_header("STEP 3:HYPOTHESIS ABLATION")
     # Get the source hypothesis from the data
-        essential_key_points = ablate_hypothesis(extract_list, chemical_question, source_hypothesis, baseline_score,initial_hypotheses_file,iteration_output_dir,score_drop_threshold=0.01)
+        ablate_output_dir = os.path.join(iteration_output_dir, f"ablation_{i+1}")
+        os.makedirs(ablate_output_dir, exist_ok=True)  # Ensure the directory exists
+        essential_key_points = ablate_hypothesis(extract_list, chemical_question, source_hypothesis, baseline_score,initial_hypotheses_file,ablate_output_dir,score_drop_threshold=0.015)#0.01
 
         print(f"Essential Key Points: {essential_key_points}")
 
-    
-        previously_evaluated_list.append(essential_key_points)  # Append the essential key points to the list
+        # previously_evaluated_list.append(essential_key_points)
+        previously_evaluated_list.extend(essential_key_points)  # Append the essential key points to the list
 
 
     regenerate_from_list_data(chemical_question,previously_evaluated_list, iteration_output_dir,num_iterations)
@@ -97,8 +99,8 @@ def iterative_process(initial_hypotheses_file, index, correction_factor, output_
 
 # Main function to run the iterative process
 if __name__ == '__main__':
-    main_output_directory = "./process_results5"
-    initial_file = "./Data_experiment/i-TE/0/0.json"
+    main_output_directory = "./process_results7"
+    initial_file = "./Data_experiment/i-TE/0/mc_1.json"
    
 
 
@@ -108,5 +110,5 @@ if __name__ == '__main__':
         index=1, 
         correction_factor=1,
         output_dir=main_output_directory,
-        num_iterations=3
+        num_iterations=10
     )
