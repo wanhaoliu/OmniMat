@@ -278,13 +278,14 @@ def evaluate_ablated_hypothesis(ablated_hypothesis_file, index, baseline_score, 
 
     # return essential_key_points
 
-def regenerate_from_list_data(chemical_question,ssential_key_points, output_dir,num=3):
+def regenerate_from_list_data(chemical_question_gdth_hypothese,ssential_key_points, output_dir,num=3):
     """
     Regenerates the dataset from the filtered data file.
 
     """
+    chemical_question = chemical_question_gdth_hypothese[0]
     # Initialize the list to store formatted data
-    formatted_data = []
+    # formatted_data = []
     # Initialize the list to store regenerated data
     regenerate_data = []
     for i in range(num):
@@ -314,13 +315,16 @@ def regenerate_from_list_data(chemical_question,ssential_key_points, output_dir,
         regenerate_data.append(step4_output) 
 
     #add the regenerated data to the formatted data
-    formatted_data.append(regenerate_data)
+    # formatted_data.append(regenerate_data)
+    # Add the question and hypothesis to the formatted data
+    chemical_question_gdth_hypothese.append(regenerate_data)
     # Save to output path
     output_path = os.path.join(output_dir, "regenerated_data.json")
     with open(output_path, 'w', encoding='utf-8') as f:
-        json.dump(formatted_data, f, indent=4)
+        json.dump(chemical_question_gdth_hypothese, f, indent=4)
         
     print(f"Regenerated dataset saved to: {output_path}")
+    return output_path
 
 def extract_lsit(chemical_question, technical_data, previously_evaluated_list):
 

@@ -44,9 +44,9 @@ def extract_and_save_key_points(input_path, output_file_path,score_threshold=0.0
     save_dataset_to_json(filtered_data, output_file_path)
 
 
-def iterative_process(initial_hypotheses_file, index, correction_factor, output_dir, num_iterations=3):
+def iterative_process(initial_hypotheses_file, index,num, correction_factor, output_dir, num_iterations=3):
     current_hypotheses_file = initial_hypotheses_file
-    iteration_num = 1
+    iteration_num = num
     iteration_output_dir = os.path.join(output_dir, f"iteration_{iteration_num}")
 
     # simulator hypotheses feedback_score
@@ -62,7 +62,7 @@ def iterative_process(initial_hypotheses_file, index, correction_factor, output_
     extract_and_save_key_points(
             input_path=filtered_data_path, # use the output from feedback_score
             output_file_path=key_points_path, 
-            score_threshold=0.001 
+            score_threshold=0.015  # threshold for key points extraction
         )
     # Check if the key points file exists and is not empty
     with open(key_points_path, 'r', encoding='utf-8') as f:
@@ -84,31 +84,38 @@ def iterative_process(initial_hypotheses_file, index, correction_factor, output_
     # Get the source hypothesis from the data
         ablate_output_dir = os.path.join(iteration_output_dir, f"ablation_{i+1}")
         os.makedirs(ablate_output_dir, exist_ok=True)  # Ensure the directory exists
-        essential_key_points = ablate_hypothesis(extract_list, chemical_question, source_hypothesis, baseline_score,initial_hypotheses_file,ablate_output_dir,score_drop_threshold=0.015)#0.01
+        essential_key_points = ablate_hypothesis(extract_list, chemical_question, source_hypothesis, baseline_score,initial_hypotheses_file,ablate_output_dir,score_drop_threshold=0.010)#0.01
 
         print(f"Essential Key Points: {essential_key_points}")
 
         # previously_evaluated_list.append(essential_key_points)
         previously_evaluated_list.extend(essential_key_points)  # Append the essential key points to the list
 
-
-    regenerate_from_list_data(chemical_question,previously_evaluated_list, iteration_output_dir,num_iterations)
+    chemical_question_gdth_hypothses = [data[0], data[1]]  # Update the chemical question with the new hypotheses
+    new_path = regenerate_from_list_data(chemical_question_gdth_hypothses,previously_evaluated_list, iteration_output_dir,num_iterations)
 
     print(f"\n✅ Iterative process completed. Check the '{output_dir}' directory.")
+    return new_path
 
 
 # Main function to run the iterative process
 if __name__ == '__main__':
-    main_output_directory = "./process_results7"
+    main_output_directory = "./process_results8"
     initial_file = "./Data_experiment/i-TE/0/mc_1.json"
    
 
 
     # Run the iterative process with the specified parameters
-    iterative_process(
-        initial_hypotheses_file=initial_file,
-        index=1, 
+    path = initial_file
+    for i  in range(3):
+        print(f"\n\n--- Iteration {i} ---")
+        iter_path = iterative_process(
+        initial_hypotheses_file=path,
+        index=1, num=i,
         correction_factor=1,
         output_dir=main_output_directory,
         num_iterations=10
-    )
+        )
+        path = iter_path
+
+
