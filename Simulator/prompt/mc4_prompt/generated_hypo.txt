@@ -16,6 +16,7 @@ Deconstruct each Previously Generated Hypothesis into its constituent components
 Step 2: Deconstruct the System: Differentiate Core Function from Supporting Matrix.
 2a. Identify the Core Functional Components: From the catalogue, identify the component or set of components directly responsible for producing the core scientific phenomenon or chemical transformation.
 2b. Identify the Supporting Matrix Components: Identify the components that serve to provide the physical structure, reaction environment, stability, or modulation for the Core Functional Components.
+2c. Identify Mutually Exclusive Techniques: Critically examine the catalogue for any techniques that serve the same primary purpose or functional role. If two or more components are different methods to achieve an identical outcome (e.g., one is 'Method X for creating a porous structure' and another is 'Method Y for creating a porous structure'), they must be categorized as mutually exclusive and cannot be combined in a single experiment.
 Step 3: Generate a Novel Hypothesis.
 Novelty Rule: A new hypothesis is considered novel as long as its complete combination of components is not identical to any combination found in the Previously Generated Hypotheses. A change in even a single component (whether a Core Functional Component, a Supporting Matrix Component, or a specific operational condition) is sufficient to constitute a new, valid hypothesis.
 Action: Construct a new, valid combination of components from the catalogue that adheres to the Novelty Rule.

@@ -1,5 +1,5 @@
 from simulation_validation import feedback_score
-from gene_hypo import extract_lsit,print_header,ablate_hypothesis,regenerate_from_list_data
+from gene_hypo import extract_lsit,print_header,ablate_hypothesis,regenerate_from_list_data,design_experimental_protocol
 import os
 import json
 # from dataset import extract_and_save_key_points
@@ -100,7 +100,7 @@ def iterative_process(initial_hypotheses_file, index,num, correction_factor, out
 
 # Main function to run the iterative process
 if __name__ == '__main__':
-    main_output_directory = "./process_results8"
+    main_output_directory = "./process_results10"
     initial_file = "./Data_experiment/i-TE/0/mc_1.json"
    
 
@@ -114,8 +114,10 @@ if __name__ == '__main__':
         index=1, num=i,
         correction_factor=1,
         output_dir=main_output_directory,
-        num_iterations=10
+        num_iterations=15
         )
         path = iter_path
+    design_experimental_protocol(path)
+    print(f"\n\nFinal hypotheses saved to: {path}")
 
 

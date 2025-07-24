@@ -13,8 +13,10 @@ Step 1: Targeted Extraction
 Primary Task: Parse the input pre-categorized document and extract only the items listed under the ### A. Chemicals and ### B. Techniques headings.
 Strict Rule: Completely ignore the content in all other sections, such as ### C. Mechanisms/Principles and ### D. Parameters/Targets.
 Step 2: Core Name Extraction
-For each item that passed the filter in Step 1, strip away all modifying information (such as specific values, concentrations, percentages, adjectives, etc.), retaining only its most fundamental, core name.
+For each item that passed the filter in Step 1, strip away all modifying information (such as specific values, concentrations, percentages.), retaining only its most fundamental, core name.
 Example: For the input item "5% (w/v) solution of PMMA", its core name should be extracted as "PMMA".
+If a key point lists multiple components connected by "and", "/", or similar conjunctions, and they represent a single functional unit (like a redox pair, a mixture, or a composite), you must treat them as a single, indivisible entity. Do not split them.
+Example: For an input item like Graphene/Polyaniline (G/PANI) Composite, its core name is Graphene/Polyaniline Composite. It represents a single, unified material.
 Step 3: Comparison and Filtering
 Take the core name extracted in the previous step and compare it against the [Reference List of Evaluated Components].
 If the core name (or its common synonyms or acronyms) already exists in the reference list, it must be filtered out.

@@ -33,7 +33,8 @@ The strategic direction is set. Now, in the capacity of an Experimental Design E
 ---
 
 # INPUT INFORMATION
-
+[Core Research Question]
+{chemical_question}
 The Core Hypothesis and Justification formulated in the previous step:
 {hypothesis_from_step2}
 

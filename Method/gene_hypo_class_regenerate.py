@@ -174,13 +174,6 @@ def main():
     print(textwrap.fill(step2_output, width=100))
 
 
-
-
-
-
-
-
-
     # --- STEP 3: VALIDATION PROTOCOL DESIGN ---
     print_header("STEP 3: DESIGNING VALIDATION PROTOCOL (FINAL OUTPUT)")
     try:

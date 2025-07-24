@@ -382,24 +382,54 @@ def extract_lsit(chemical_question, technical_data, previously_evaluated_list):
     # return previously_evaluated_list
     return extract_list
 
-   
-    # --- STEP 3: HYPOTHESIS ABLATION ---
-    print_header("STEP 3: HYPOTHESIS ABLATION")
+def design_experimental_protocol(input_path):
+    with open(input_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    chemical_question = data[0]
+    
+    try:
+        with open(PROMPT_5_FILE, 'r', encoding='utf-8') as f:
+            prompt5_template = f.read()
+    except FileNotFoundError:
+        print(f"[ERROR] Prompt file not found: {PROMPT_5_FILE}")
+    designing_experiment = []
+    for i in range(len(data[2])):
+        step2_output = data[2][i]
+        prompt5_formatted = prompt5_template.format(
+        chemical_question=chemical_question,
+        hypothesis_from_step2=step2_output,
+    )
+        print(f"prompt5_formatted{prompt5_formatted}\n")
+        final_output = api_request(prompt5_formatted)
+        print("designing validation protocol...\n")
+        print(final_output)
+        designing_experiment.append(final_output)
+    # Save the final output to the output path
+    directory = os.path.dirname(input_path)
+    new_filename = os.path.basename(input_path).replace('.json', '_experimental_protocol.json')
+    output_path = os.path.join(directory, new_filename)
+    
+    with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump(designing_experiment, f, indent=4)
 
-    source_hypothesis="We hypothesize that engineering a dual-crosslinked hierarchical polymer electrolyte system combining poly(ionic liquids) (PILs) and poly(vinyl alcohol) (PVA) will significantly enhance ionic conductivity and mechanical properties for thermoelectric applications. This will be achieved through a meticulously designed process involving salting-out, freeze-casting, and electrospinning techniques, integrated with the incorporation of thermogalvanic ions.\n\nMethodology:\n\n1. Material Preparation:\n   - Synthesize a PIL matrix via a chemical modification step that introduces sulfonate groups (—SO₃⁻) to the polymer backbone, enhancing ionic transport. This should be accomplished using a suitable solvent such as dimethylformamide (DMF) at 60°C for 3 hours under nitrogen conditions to prevent moisture contamination.\n   - Prepare a 10% (w/v) PVA solution in deionized water at 80°C, adding lithium salts (e.g., LiCl) at a concentration of 0.2 M to enhance ionic mobility across the polymer matrix.\n\n2. Salting-Out Process:\n   - Gradually introduce ammonium sulfate (0.2 M) to the PVA solution while stirring at a controlled rate of 300 RPM. Allow the solution to phase-separate at 25°C for 2 hours to induce the formation of porous microstructures, targeting the creation of a network conducive to ionic transport.\n\n3. Dual-Crosslinking and Hierarchical Structure Formation:\n   - Apply the synthesized PIL solution onto the phase-separated PVA layer using a spray-coating method to ensure uniform coverage. Crosslink the hybrid system using 0.05 M N,N'-methylenebisacrylamide under 254 nm UV irradiation for 10 minutes to form a robust interpenetrating network that enhances ionic pathways.\n   - Utilize electrospinning with parameters set at an applied voltage of 18 kV and a solution concentration of 12% (w/v). Collect aligned fibers on a rotating collector to integrate into the polymer matrix, followed by ice-templating, freezing the assembly with a rate of -2 °C/min to form homogeneous nanochannels.\n\n4. Incorporation of Thermogalvanic Ions:\n   - Integrate a redox couple (e.g., ferro/ferricyanide) at a concentration of 1-3 mol/L during the gelation phase to enhance electrochemical performance. Aim for homogenous dispersion through a gentle mixing process that maintains structural integrity.\n\n5. Mechanical Training Procedure:\n   - Conduct cyclic stretching of the resultant polymer electrolyte at strains of 20-30% for 500 cycles. This mechanical training aims to align the polymer chains and improve inter-fibrillar bonding, enhancing the material's fatigue resistance and overall mechanical strength.\n\n6. Characterization:\n   - Employ Scanning Electron Microscopy (SEM) to elucidate the microstructural characteristics, confirming the alignment of nanochannels and fibers. Measure ionic conductivity via Electrochemical Impedance Spectroscopy (EIS) at varying temperatures (20-80°C), ensuring targeted conductivity exceeds 10⁻³ S/m.\n   - Assess mechanical integrity through tensile tests following ASTM D638, aiming for mechanical toughness > 2500 J/m² and elongation at break beyond 300%.\n\n7. Device Integration:\n   - Lastly, incorporate the engineered polymer electrolyte into a prototype thermoelectric cell, evaluating essential parameters such as the Seebeck coefficient and output power density against established benchmarks. This step aims to validate the practical applicability of the developed hybrid polymer systems in next-generation thermoelectric devices.\n\nBy utilizing this comprehensive methodology, we anticipate overcoming the current limitations of polymer electrolytes, thereby significantly enhancing their ionic conductivity and mechanical resilience for thermoelectric applications."
 
-    # print(f"--------------------source_hypothesis---------\n{source_hypothesis}")
+    # # --- STEP 3: HYPOTHESIS ABLATION ---
+    # print_header("STEP 3: HYPOTHESIS ABLATION")
 
-    baseline_score = 0.043936933623407
-    input_path = INITIAL_DATA_FILE
-    output_path = "./output0708_TEST2/"
-    os.makedirs(output_path, exist_ok=True)
-    essential_key_points = ablate_hypothesis(extract_list, chemical_question, source_hypothesis, baseline_score,input_path,output_path,score_drop_threshold=0.01)
-    ablate_hypothesis(extract_list, chemical_question, source_hypothesis)
-    # essential_key_points = [ "Poly(vinyl alcohol) (PVA)", "Freeze-casting","Ferro/Ferricyanide Redox Couple" ]
-    print(f"Essential Key Points: {essential_key_points}")
+    # source_hypothesis="We hypothesize that engineering a dual-crosslinked hierarchical polymer electrolyte system combining poly(ionic liquids) (PILs) and poly(vinyl alcohol) (PVA) will significantly enhance ionic conductivity and mechanical properties for thermoelectric applications. This will be achieved through a meticulously designed process involving salting-out, freeze-casting, and electrospinning techniques, integrated with the incorporation of thermogalvanic ions.\n\nMethodology:\n\n1. Material Preparation:\n   - Synthesize a PIL matrix via a chemical modification step that introduces sulfonate groups (—SO₃⁻) to the polymer backbone, enhancing ionic transport. This should be accomplished using a suitable solvent such as dimethylformamide (DMF) at 60°C for 3 hours under nitrogen conditions to prevent moisture contamination.\n   - Prepare a 10% (w/v) PVA solution in deionized water at 80°C, adding lithium salts (e.g., LiCl) at a concentration of 0.2 M to enhance ionic mobility across the polymer matrix.\n\n2. Salting-Out Process:\n   - Gradually introduce ammonium sulfate (0.2 M) to the PVA solution while stirring at a controlled rate of 300 RPM. Allow the solution to phase-separate at 25°C for 2 hours to induce the formation of porous microstructures, targeting the creation of a network conducive to ionic transport.\n\n3. Dual-Crosslinking and Hierarchical Structure Formation:\n   - Apply the synthesized PIL solution onto the phase-separated PVA layer using a spray-coating method to ensure uniform coverage. Crosslink the hybrid system using 0.05 M N,N'-methylenebisacrylamide under 254 nm UV irradiation for 10 minutes to form a robust interpenetrating network that enhances ionic pathways.\n   - Utilize electrospinning with parameters set at an applied voltage of 18 kV and a solution concentration of 12% (w/v). Collect aligned fibers on a rotating collector to integrate into the polymer matrix, followed by ice-templating, freezing the assembly with a rate of -2 °C/min to form homogeneous nanochannels.\n\n4. Incorporation of Thermogalvanic Ions:\n   - Integrate a redox couple (e.g., ferro/ferricyanide) at a concentration of 1-3 mol/L during the gelation phase to enhance electrochemical performance. Aim for homogenous dispersion through a gentle mixing process that maintains structural integrity.\n\n5. Mechanical Training Procedure:\n   - Conduct cyclic stretching of the resultant polymer electrolyte at strains of 20-30% for 500 cycles. This mechanical training aims to align the polymer chains and improve inter-fibrillar bonding, enhancing the material's fatigue resistance and overall mechanical strength.\n\n6. Characterization:\n   - Employ Scanning Electron Microscopy (SEM) to elucidate the microstructural characteristics, confirming the alignment of nanochannels and fibers. Measure ionic conductivity via Electrochemical Impedance Spectroscopy (EIS) at varying temperatures (20-80°C), ensuring targeted conductivity exceeds 10⁻³ S/m.\n   - Assess mechanical integrity through tensile tests following ASTM D638, aiming for mechanical toughness > 2500 J/m² and elongation at break beyond 300%.\n\n7. Device Integration:\n   - Lastly, incorporate the engineered polymer electrolyte into a prototype thermoelectric cell, evaluating essential parameters such as the Seebeck coefficient and output power density against established benchmarks. This step aims to validate the practical applicability of the developed hybrid polymer systems in next-generation thermoelectric devices.\n\nBy utilizing this comprehensive methodology, we anticipate overcoming the current limitations of polymer electrolytes, thereby significantly enhancing their ionic conductivity and mechanical resilience for thermoelectric applications."
 
-    regenerate_from_list_data(chemical_question,essential_key_points, output_path,num=3)
+    # # print(f"--------------------source_hypothesis---------\n{source_hypothesis}")
+
+    # baseline_score = 0.043936933623407
+    # input_path = INITIAL_DATA_FILE
+    # output_path = "./output0708_TEST2/"
+    # os.makedirs(output_path, exist_ok=True)
+    # essential_key_points = ablate_hypothesis(extract_list, chemical_question, source_hypothesis, baseline_score,input_path,output_path,score_drop_threshold=0.01)
+    # ablate_hypothesis(extract_list, chemical_question, source_hypothesis)
+    # # essential_key_points = [ "Poly(vinyl alcohol) (PVA)", "Freeze-casting","Ferro/Ferricyanide Redox Couple" ]
+    # print(f"Essential Key Points: {essential_key_points}")
+
+    # regenerate_from_list_data(chemical_question,essential_key_points, output_path,num=3)
 
 
 def main():
