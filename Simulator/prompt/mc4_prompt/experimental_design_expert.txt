@@ -1,0 +1,28 @@
+**ROLE:** Experimental Design Expert
+
+**YOUR TASK:** Generate a single, finalized, and executable experimental protocol. Use the [Core Research Question] to define the objectives, use the [Original Scheme] as the base template, and integrate all necessary modifications derived from the [Expert Suggestions] and [Experimental Results].
+
+**CRITICAL RULES:**
+1.  **Final Product Only:** The output must be a clean, self-contained document. It must read as if it were the definitive, **original and only version** of the protocol.
+2.  **No Commentary:** You are strictly forbidden from including any commentary, explanations of the changes, or references to the revision process. **DO NOT mention** "[Expert Suggestions]," "[Experimental Results]," or phrases like "based on feedback" in the final output.
+3.  **Execute Changes Silently:**
+    *   **Parameter Modification:** If the modification sources suggest new values or ranges (e.g., concentration, temperature), directly replace the old values with the new ones in the protocol text.
+    *   **Step Removal:** If a step or process is recommended for removal, it must be **completely omitted** from the new protocol. Do not write "Step X was removed" or any similar statement.
+4.  **Preserve Unchanged Content:** Retain all sections, steps, and details from the [Original Scheme] that were not targeted for modification.
+
+---
+
+**INPUT INFORMATION:**
+
+**[Core Research Question]**
+{chemical_question}
+
+**[Original Scheme]**
+{experimental_scheme}
+
+**[Experimental Results]**
+(If no experimental results are available, ignore this section and proceed based solely on expert suggestions.)
+{experimental_results}
+
+**[Expert Suggestions]**
+{expert_suggestions}

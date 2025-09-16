@@ -3,8 +3,8 @@ import requests
 import json
 
 
-Baseurl ="http://35.220.164.252:3888/"
-Skey = "sk-8bSQWPcJy0bEq2RD53vj05oP8DRh7UeWwztrO8TmT9Umm9Ao"
+Baseurl =""
+Skey = ""
 
 
 def api_request(messages,temperature = 1.0, max_retries=60, sleep_time=15):

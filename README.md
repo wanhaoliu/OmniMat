@@ -1,1 +1,1 @@
-# mc_hypothese
+# MindChem

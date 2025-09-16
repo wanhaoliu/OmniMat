@@ -1,7 +1,8 @@
 from simulation_validation import feedback_score
-from gene_hypo import extract_lsit,print_header,ablate_hypothesis,regenerate_from_list_data,design_experimental_protocol
+from gene_hypo import extract_lsit,print_header,ablate_hypothesis,regenerate_from_list_data,design_experimental_protocol,design_interation_expert_experimental_protocol
 import os
 import json
+import argparse
 # from dataset import extract_and_save_key_points
 
 def read_and_filter_json(file_path, score_threshold=0.001):
@@ -97,12 +98,61 @@ def iterative_process(initial_hypotheses_file, index,num, correction_factor, out
     print(f"\n✅ Iterative process completed. Check the '{output_dir}' directory.")
     return new_path
 
+def main():
+    
+    parser = argparse.ArgumentParser(
+        description="Design an experimental protocol based on input data, expert suggestions, and experimental results."
+    )
 
-# Main function to run the iterative process
-if __name__ == '__main__':
-    main_output_directory = "./process_results10"
-    initial_file = "./Data_experiment/i-TE/0/mc_1.json"
-   
+    parser.add_argument(
+        '--input_path',
+        type=str,
+        required=True,
+        help="Path to the input JSON file containing hypotheses or data"
+    )
+    
+    parser.add_argument(
+        '--output_dir',
+        type=str,
+        required=True,
+        help="Path to the output directory where the generated experimental protocol JSON file will be saved (e.g., './Method/0818_output/')"
+    )
+
+
+    parser.add_argument(
+    '--inspire_paper_path',
+    type=str,
+    required=True,
+    help="Path to the JSON file containing the experimental protocol of the inspiring paper (e.g., './Data_experiment/inspire_paper.json')"
+)
+
+
+
+    parser.add_argument(
+        '--expert_suggestions',
+        type=str,
+        nargs='*',
+        default=["none", "none"],
+        help="List of expert suggestions to guide the experimental protocol (default: ['none', 'none']). Provide as space-separated strings."
+    )
+    
+    parser.add_argument(
+        '--experimental_results',
+        type=str,
+        default="none",
+        help="Description of experimental results to inform the protocol design (default: 'none')."
+    )
+
+
+
+    args = parser.parse_args()
+
+
+
+
+    main_output_directory = args.output_dir
+    initial_file = args.input_path
+    inspire_paper_path = args.inspire_paper_path
 
 
     # Run the iterative process with the specified parameters
@@ -117,7 +167,39 @@ if __name__ == '__main__':
         num_iterations=15
         )
         path = iter_path
-    design_experimental_protocol(path)
-    print(f"\n\nFinal hypotheses saved to: {path}")
+
+
+    print(f"\n\nhypotheses saved to: {path}")
+
+    #construct the experimental protocol based on the hypotheses and the inspire paper
+    output_path = design_experimental_protocol(path,inspire_paper_path)
+    print(f"\n\nexperimental protocol saved to: {output_path}")
+
+    print_header("Designing Experimental Protocol based on Expert Suggestions and Experimental Results")
+    
+    path = "./Data_experiment/Output/test/regenerated_data.json"
+    output_path = "./Data_experiment/Output/test/regenerated_data_experimental_protocol.json"
+
+
+    # Call the function to design the experimental protocol
+    path_experimental_protocol=design_interation_expert_experimental_protocol(
+        input_path=path,
+        experimental_path=output_path,
+        expert_suggestions=args.expert_suggestions,
+        experimental_results=args.experimental_results
+    )
+    # main_output_directory = args.input_path
+
+    print(f"\n\nExperimental protocol finished. Check the '{path_experimental_protocol}' directory for results.")
+
+if __name__ == '__main__':
+    main()
+
+
+
+
+
+
+
 
 
