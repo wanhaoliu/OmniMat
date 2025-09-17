@@ -1,21 +1,21 @@
-# MindChem: AI-Guided Experimental Protocol Generation and Iterative Refinement Framework
+# OmniMat: AI-Guided Experimental Protocol Generation and Iterative Refinement Framework
 
 ## Overview
 
-**MindChem** is an an innovative, Python-based framework designed to **accelerate experimental protocol generation and refinement in automated scientific discovery** by integrating Artificial Intelligence (AI)'s intelligent design capabilities with real-world experimental feedback. It starts from high-level scientific hypotheses, progressively deriving detailed, rigorous, and actionable experimental protocols. Through iterative interaction with expert suggestions and actual experimental results, it optimizes these protocols, significantly enhancing the efficiency and success rate of new materials development.
+**OmniMat** is an an innovative, Python-based framework designed to **accelerate experimental protocol generation and refinement in automated scientific discovery** by integrating Artificial Intelligence (AI)'s intelligent design capabilities with real-world experimental feedback. It starts from high-level scientific hypotheses, progressively deriving detailed, rigorous, and actionable experimental protocols. Through iterative interaction with expert suggestions and actual experimental results, it optimizes these protocols, significantly enhancing the efficiency and success rate of new materials development.
 
-The core value of **MindChem** lies in its ability to embed AI's "mind" throughout the entire scientific discovery lifecycle, from initial inspiration to final experimental design. It goes beyond merely generating hypotheses; it constructs a validated, actionable experimental blueprint.
+The core value of **OmniMat** lies in its ability to embed AI's "mind" throughout the entire scientific discovery lifecycle, from initial inspiration to final experimental design. It goes beyond merely generating hypotheses; it constructs a validated, actionable experimental blueprint.
 
 ## Core Contributions
 
 *   **AI-Driven Experimental Protocol Generation:** Utilizes an AI framework built upon Large Language Models (LLMs) to generate detailed, rigorous, and actionable experimental validation protocols from abstract scientific questions and hypotheses. This establishes a new, intelligent paradigm for materials development, transcending traditional trial-and-error methods.
 *   **Interactive Experimental Protocol Refinement:** Introduces a unique iterative refinement mechanism that continuously optimizes AI-generated experimental protocols by integrating expert suggestions and feedback data from actual experiments, ensuring their feasibility and effectiveness in physical reality.
-*   **Overcoming Traditional Materials Development Challenges:** Demonstrated, using the example of high-performance anisotropic polymer thermocells, how MindChem, through AI-conceived innovative microstructure design and fabrication strategies (such as uniform directional freezing combined with salting-out), successfully generated and validated experimental protocols that resolve the inherent power-robustness dilemma in materials.
+*   **Overcoming Traditional Materials Development Challenges:** Demonstrated, using the example of high-performance anisotropic polymer thermocells, how omnimat, through AI-conceived innovative microstructure design and fabrication strategies (such as uniform directional freezing combined with salting-out), successfully generated and validated experimental protocols that resolve the inherent power-robustness dilemma in materials.
 *   **Enabling Complex Functional Materials Development:** Provides a powerful AI-driven paradigm that significantly facilitates the design, synthesis, and validation of numerous complex functional materials, offering practical solutions for next-generation frontier applications like wearable electronics.
 
 ## Key Features
 
-*   **Hypothesis Generation and Structuring (via MOOSE-Chem Integration):** The platform leverages advanced LLMs to generate novel scientific hypotheses based on research background and interdisciplinary inspirations. These hypotheses are then structured into "element chains" (Chemicals, Technique, Parameters, Mechanism, Result), serving as the starting point for experimental protocol design.
+*   **Hypothesis Generation and Structuring:** The platform leverages advanced LLMs to generate novel scientific hypotheses based on research background and interdisciplinary inspirations. These hypotheses are then structured into "element chains" (Chemicals, Technique, Parameters, Mechanism, Result), serving as the starting point for experimental protocol design.
 *   **AI-Guided Experimental Design Expert:** The AI acts as an "experimental design expert," formulating detailed, modular experimental workflows (e.g., Precursor System Preparation, Core Structure Fabrication, Functionalization & Integration, Characterization & Performance Evaluation) based on core hypotheses and available information.
 *   **Parameter Range and Control Group Design:** For critical quantitative variables (e.g., mass fraction, molar concentration, temperature), the AI proposes scientifically sound testing ranges or gradients and designs necessary control groups to ensure experimental rigor.
 *   **Iterative Feedback Mechanism:** Allows for inputting **expert suggestions** and **actual experimental results** via command-line arguments. This feedback guides the AI to evaluate, adjust, and optimize the current experimental protocols, forming a continuous improvement loop.
@@ -30,23 +30,23 @@ The core value of **MindChem** lies in its ability to embed AI's "mind" througho
 
 ## Installation
 
-1.  **Clone the MindChem repository:**
+1.  **Clone the OmniMat repository:**
 
     ```bash
-    git clone https://github.com/wanhaoliu/MOOSE-Chem3.git
-    cd MOOSE-Chem3 # MindChem is built upon MOOSE-Chem3.
+    git clone https://github.com/wanhaoliu/OmniMat.git
+    cd OmniMat
     ```
 
 2.  **Create a Conda environment:**
 
     ```bash
-    conda create -n mindchem python=3.8
+    conda create -n  omnimat python=3.8
     ```
 
 3.  **Activate the environment:**
 
     ```bash
-    conda activate mindchem
+    conda activate omnimat
     ```
 
 4.  **Install dependencies:**
@@ -64,11 +64,11 @@ The core value of **MindChem** lies in its ability to embed AI's "mind" througho
 
 ### 1. Initial Hypothesis Generation and Preparation
 
-First, utilize the **MOOSE-Chem** framework to generate preliminary scientific hypotheses. This involves defining a research question, allowing the LLM to extract inspirations from relevant literature, and generating a series of potential novel hypotheses. These hypotheses need to be formatted and saved as a JSON file, typically with a `[[question],[gdth],[gene]]` structure, to serve as input for MindChem's subsequent experimental protocol generation.
+First, utilize the **MOOSE-Chem** framework to generate preliminary scientific hypotheses. This involves defining a research question, allowing the LLM to extract inspirations from relevant literature, and generating a series of potential novel hypotheses. These hypotheses need to be formatted and saved as a JSON file, typically with a `[[question],[gdth],[gene]]` structure, to serve as input for omnimat's subsequent experimental protocol generation.
 
 ### 2. AI-Guided Experimental Protocol Generation and Iterative Refinement
 
-This is the core functionality of **MindChem**. By running the `refine_hypo.py` script, the AI will generate and iteratively refine experimental protocols based on the provided hypotheses and feedback.
+This is the core functionality of **omnimat**. By running the `refine_hypo.py` script, the AI will generate and iteratively refine experimental protocols based on the provided hypotheses and feedback.
 
 **Example of running the refinement script:**
 
