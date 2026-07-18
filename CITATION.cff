@@ -9,9 +9,8 @@ authors:
     given-names: "Wanhao"
 
 type: software
-
 version: "1.0.0"
-
+doi: "10.5281/zenodo.21431591"
 date-released: "2026-07-18"
 
 repository-code: "https://github.com/wanhaoliu/OmniMat"
