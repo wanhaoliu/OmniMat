@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+
+message: "If you use this software, please cite this archived software release."
+
+title: "OmniMat: AI-Guided Experimental Protocol Generation and Iterative Refinement Framework"
+
+authors:
+  - family-names: "Liu"
+    given-names: "Wanhao"
+
+type: software
+
+version: "1.0.0"
+
+date-released: "2026-07-18"
+
+repository-code: "https://github.com/wanhaoliu/OmniMat"
+
+url: "https://github.com/wanhaoliu/OmniMat"
+
+abstract: >-
+  OmniMat is the software framework associated with the manuscript
+  "Large Language Models as Designers for Autonomous Research of Anisotropic
+  Polymer Thermocells." It generates and iteratively refines experimental
+  protocols by integrating cross-disciplinary inspiration retrieval,
+  candidate generation and ranking, expert feedback, and experimental feedback.
+
+keywords:
+  - large language models
+  - experimental protocol generation
+  - materials discovery
+  - autonomous research
+  - polymer thermocells
